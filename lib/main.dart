@@ -1,261 +1,190 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:shimmer/shimmer.dart';
 
-void main(){
-  runApp(MyApp());
+
+
+void main() {
+  runApp(const MyApp());
 }
 
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
 
-class MyApp extends StatelessWidget{
-  MyApp({super.key});
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
 
-  Widget build(BuildContext context){
-    return MaterialApp(
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomePage(),
     );
   }
 }
 
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Ocean(
-              imageURL:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkCGrhADwglWT766Pa9NXeOe74pc0fNIBsyX1kxs63OfQHHVgO6XCAoWDA&s=10",
-              top: "Top Destination",
-              title: "Tourist Capital of Bangladesh",
-              location: "southeastern region",
-              description: "Cox's Bazar is famous for hosting the\nworld's longest unbroken natural sandy \nbeach, stretching over 120 kilometers\nalong the Bay of Bengal.",
-            ),
-            SizedBox(height: 30),
-            Ocean(
-              imageURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJNPy4n09xByUQdG28Dj7ZjLaqQRrOT0NU4KsYmQ5cViOwtKSby_h7BehN&s=10",
-              top: "Top Destination",
-              title: "The Kingdom of Clouds",
-              location: "Southeastern Hill Region",
-              description: "Bandarban is home to the highest peaks\nin Bangladesh,pristine waterfalls, and the \nbreathtaking beauty of Nilgiri ",
-            ),
-            SizedBox(height: 30),
-            Ocean(
-                imageURL: "https://upload.wikimedia.org/wikipedia/commons/7/73/Hanging_bridge_of_Rangamati%2C_Bangladesh._.jpg",
-                top: "Lake",
-                title: "The Scenic Lake City", // সীনিক = মনোরম,প্রাকৃতিক দৃশ্যসমৃদ্ধ,, মনোরম হ্রদের শহর
-                location: "Chittagong Hill Tracts",
-                description: "Rangamati is famous for the mesmerizing\nKaptai Lake, he iconic Hanging Bridge, and \nSajek Valley—the beautiful queen of hills nestled amidst\nfloating clouds")
-          ],
-        ),
-      ),
-    );
+  int count = 0;
+
+  void incrementCounter() {
+    setState(() {
+      count = count + 5;
+    });
   }
-}
-
-
-
-
-class Ocean extends StatelessWidget {
-  final String imageURL;
-  final String top;
-  final String title;
-  final String location;
-  final String description;
-
-  const Ocean({
-    super.key,
-    required this.imageURL,
-    required this.top,
-    required this.title,
-    required this.location,
-    required this.description,
-  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 400,
-      width: double.infinity,
-      decoration: BoxDecoration(
-          color: Colors.black.withValues(alpha: 0.15),
-          borderRadius: BorderRadius.circular(8),
-          image: DecorationImage(
-            image: NetworkImage(imageURL),
-            fit: BoxFit.cover,
+    return ScreenUtilInit(
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (_, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text("Staggered Grid Demo"),
+            backgroundColor: Colors.green,
           ),
-          boxShadow: [ BoxShadow(
-            color: Colors.black,
-            blurRadius: 20.6,
-            offset: Offset(0,2),
-          )]
-      ),
-      child: Container(
-        padding: EdgeInsets.all(15),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            gradient: LinearGradient(
-              colors: [
-                Colors.black54.withValues(alpha: 0.01),
-                Colors.black54.withValues(alpha: 0.20),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            )
-        ),
 
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.orange.withValues(alpha: 0.9),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Text(top, style: TextStyle(
-                    color: Colors.white,
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+
+              child: Column(
+                children: [
+                  Text("Count: $count", style: TextStyle(
+                    fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
                   ),
                   ),
-                ),
-                //  const SizedBox(height: 6),
-
-                Text(title, style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                ),
-                //const SizedBox(height: 6),
-
-                Row(
-                  children: [
-                    Icon(Icons.location_on, color: Colors.yellow, size: 30),
-                    SizedBox(width: 8),
-                    Text(location, style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                    ),
-                  ],
-                ),
-                // মাঝখানে একটু গ্যাপ দেওয়ার জন্য (ডিজাইন সুন্দর রাখবে)
-                const SizedBox(height: 50),
+                  const SizedBox(height: 10),
 
 
-                Text(description,
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                Row(
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                      ),
-                      icon: const Icon(Icons.travel_explore),
-                      label: const Text("Explore"),
-                    ),
-                    const SizedBox(width: 24),
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.35),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Icon(Icons.play_arrow, color: Colors.white),
-                    ),
-                  ],
-                ),
-              ],
-            ),
 
 
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.45),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(Icons.favorite, color: Colors.red),
-                    ),
-                    SizedBox(width: 15),
-
-                    Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.45),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(Icons.inbox, color: Colors.yellow),
-                    )
-                  ],
-                ),
-
-                Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.20),
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 3,
-                      )
-                  ),
-                  child: Column(
+                  //✅ Staggered Grid View   স্ট্যাগার্ড
+                  StaggeredGrid.count(
+                    crossAxisCount: 6,
+                    mainAxisSpacing: 4,
+                    crossAxisSpacing: 4,
                     children: [
-                      Text("4.9 Rating", style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      )),
-                      Row(
-                        children: [
-                          Icon(Icons.favorite, color: Colors.red),
-                          SizedBox(width: 8),
-                          Text("10k Reviews",style: TextStyle(
-                            color: Colors.white,
-                          ),)
-                        ],
-                      )
+                      StaggeredGridTile.count(
+                        crossAxisCellCount: 2,
+                        mainAxisCellCount: 2,
+                        child: Image.network(
+                          "https://picsum.photos/300/300",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+
+                      StaggeredGridTile.count(
+                        crossAxisCellCount: 2,
+                        mainAxisCellCount: 1,
+                        child: Image.network(
+                          "https://picsum.photos/300/400",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+
+                      StaggeredGridTile.count(
+                        crossAxisCellCount: 2,
+                        mainAxisCellCount: 2,
+                        child: Image.network(
+                          "https://picsum.photos/300/350",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+
+                      StaggeredGridTile.count(
+                        crossAxisCellCount: 2,
+                        mainAxisCellCount: 1,
+                        child: Image.network(
+                          "https://picsum.photos/300/450",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ],
                   ),
-                )
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
+                  SizedBox(height: 40),
 
+
+                  Text("StaggeredGrid End"),
+
+                  MasonryGridView.count(     //✅ Masonry Grid View   মেসনারি
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        child: Column(
+                          children: [
+                            Image.network('https://picsum.photos/300/450'),
+                            const Text('Image!'),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+
+
+
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 10,
+                    itemBuilder: (context, index) {
+                      return Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Colors.white,
+                          ),
+                          title: Container(
+                            height: 16,
+                            color: Colors.white,
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Container(
+                              height: 12,
+                              width: 120,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+
+
+                ],
+              ),
+            ),
+          ),
+
+
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              incrementCounter();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Increment Counter")),
+              );
+            },
+            child: const Icon(Icons.add),
+          ),
+        );
+      },
+    );
   }
 }
